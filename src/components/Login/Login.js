@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
 import "./Login.css"
 
@@ -17,9 +17,11 @@ const Login = () => {
     ] = useSignInWithEmailAndPassword(auth);
 
     const navigate = useNavigate();
+    const location = useLocation();
+    let from = location.state?.from?.pathname || "/";
 
     if (user) {
-        navigate('/');
+        navigate(from, { replace: true });
     }
 
     const handleEmailBlur = (event) => {
@@ -33,6 +35,7 @@ const Login = () => {
         event.preventDefault()
         signInWithEmailAndPassword(email, password)
     }
+
     return (
         <div className='form-container'>
             <h2 className='form-title'>LogIn</h2>
